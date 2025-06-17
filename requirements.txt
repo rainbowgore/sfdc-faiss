@@ -1,0 +1,15 @@
+flask
+gunicorn
+flask-cors
+python-dotenv
+pandas
+numpy
+openai
+langchain
+langchain-community
+langchain-openai
+faiss-cpu
+simple-salesforce
+sentence-transformers
+scikit-learn
+nltk
