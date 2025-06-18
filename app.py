@@ -50,12 +50,15 @@ def enrich_cases():
         return jsonify({"error": "No file part"}), 400
     
     file = request.files['file']
-    if file.filename == '' or not file.filename.endswith('.csv'):
+    if file.filename == '' or not (file.filename.endswith('.csv') or file.filename.endswith('.xlsx')):
         return jsonify({"error": "No selected file or invalid format"}), 400
 
     try:
-        # Read the CSV file
-        df = pd.read_csv(BytesIO(file.read()))
+        # Read the file based on its type
+        if file.filename.endswith('.csv'):
+            df = pd.read_csv(BytesIO(file.read()))
+        elif file.filename.endswith('.xlsx'):
+            df = pd.read_excel(BytesIO(file.read()))
         
         # Process the file (add your enrichment logic here)
         output = BytesIO()
@@ -74,6 +77,7 @@ def enrich_cases():
 
 @app.route("/query", methods=["POST"])
 def query_cases():
+    print("⚡ Query handled by Render server")
     if not qa_chain:
         if not init_qa_engine():
             return jsonify({"error": "QA engine initialization failed"}), 500
